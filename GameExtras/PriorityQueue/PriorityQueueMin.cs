@@ -7,29 +7,29 @@ using System.Threading.Tasks;
 
 namespace GameExtras.PriorityQueue
 {
-  public class PriorityQueueMin<T> : IEnumerable<T> where T : IComparable 
+  public class PriorityQueueMin<T> : IEnumerable<T> where T : IComparable<T> 
   {
-    private T[] pq;
+    private T[] priorityHeap;
     public int Count { get; private set; }
 
     #region Constructors
     public PriorityQueueMin()
     {
-      pq = new T[1];
+      priorityHeap = new T[1];
       Count = 0;
     }
     public PriorityQueueMin(int size)
     {
-      pq = new T[size + 1];
+      priorityHeap = new T[size + 1];
       Count = 0;
     }
 
     public PriorityQueueMin(T[] keys)
     {
       Count = keys.Length;
-      pq = new T[keys.Length + 1];
+      priorityHeap = new T[keys.Length + 1];
       for (int i = 0; i < Count; i++)
-      { pq[i + 1] = keys[i]; }
+      { priorityHeap[i + 1] = keys[i]; }
       for (int k = Count / 2; k >= 1; k--)
       { sink(k); }
 
@@ -42,18 +42,24 @@ namespace GameExtras.PriorityQueue
     public void insert(T x)
     {
       // double size of array if necessary
-      if (Count == pq.Length - 1) resize(2 * pq.Length);
+      if (Count == priorityHeap.Length - 1) resize(2 * priorityHeap.Length);
 
       // add x, and percolate it up to maintain heap invariant
-      pq[++Count] = x;
+      priorityHeap[++Count] = x;
       swim(Count);
-      // isMinHeap(); check if min heap?
+    }
+
+    public void insertRange(List<T> list)
+    {
+      foreach(T ele in list)
+      {
+        insert(ele);
+      }
     }
 
     public T Min()
     {
-      //if (IsEmpty()) { // Throw exception? }
-      return pq[1];
+      return priorityHeap[1];
     }
 
     private void resize(int capacity)
@@ -62,19 +68,18 @@ namespace GameExtras.PriorityQueue
       T[] temp = new T[capacity];
       for (int i = 1; i <= Count; i++)
       {
-        temp[i] = pq[i];
+        temp[i] = priorityHeap[i];
       }
-      pq = temp;
+      priorityHeap = temp;
     }
 
     public T DelMin()
     {
-      //if (IsEmpty()) throw new NoSuchElementException("Priority queue underflow");
-      exch(1, Count);
-      T min = pq[Count--];
+      T min = priorityHeap[1];
+      exch(1, Count--);
       sink(1);
-      pq[Count + 1] = default(T);         // avoid loitering and help with garbage collection
-      if ((Count > 0) && (Count == (pq.Length - 1) / 4)) resize(pq.Length / 2);
+      priorityHeap[Count + 1] = default(T);         // avoid loitering and help with garbage collection
+      if ((Count > 0) && (Count == (priorityHeap.Length - 1) / 4)) resize(priorityHeap.Length / 2);
       //assert isMinHeap();
       return min;
     }
@@ -83,14 +88,14 @@ namespace GameExtras.PriorityQueue
      ***************************************************************************/
     private bool greater(int i, int j)
     {
-      return pq[i].CompareTo(pq[j]) > 0;
+      return priorityHeap[i].CompareTo(priorityHeap[j]) > 0;
     }
 
     private void exch(int i, int j)
     {
-      T swap = pq[i];
-      pq[i] = pq[j];
-      pq[j] = swap;
+      T swap = priorityHeap[i];
+      priorityHeap[i] = priorityHeap[j];
+      priorityHeap[j] = swap;
     }
 
     /***************************************************************************
@@ -138,13 +143,13 @@ namespace GameExtras.PriorityQueue
       return isMinHeap(left) && isMinHeap(right);
     }
     
-
+    // Enumerator functions
     public IEnumerator<T> GetEnumerator()
     {
       PriorityQueueMin<T> copy = new PriorityQueueMin<T>();
       for(int i = 0; i < Count; i++)
       {
-        copy.insert(pq[i+1]);
+        copy.insert(priorityHeap[i+1]);
       }
       while(!copy.IsEmpty())
       {

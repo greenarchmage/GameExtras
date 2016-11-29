@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GameExtras.Astar;
 using GameExtras.PriorityQueue;
 
 namespace GameExtras
@@ -11,15 +12,14 @@ namespace GameExtras
   {
     static void Main(string[] args)
     {
-      /***************************************************************************
-    * Test routine.
-    ***************************************************************************/
+      //Test routine for priority queue
       PriorityQueueMin<string> pq = new PriorityQueueMin<string>();
       pq.insert("this");
       pq.insert("is");
       pq.insert("a");
       pq.insert("test");
       
+      // Test of enumerable interface
       string[] ar = pq.ToArray();
       for(int i = 0; i<ar.Length; i++)
       {
@@ -32,6 +32,10 @@ namespace GameExtras
 
       while (!pq.IsEmpty())
         Console.WriteLine(pq.DelMin());
+
+      // A Star test
+      Console.WriteLine("Distance to goal: " + AStarPathfinding.testMethod());
+
       Console.ReadKey();
     }
   }

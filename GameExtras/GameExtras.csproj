@@ -43,7 +43,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MyList.cs" />
+    <Compile Include="Astar\AStarPathfinding.cs" />
+    <Compile Include="Astar\Node.cs" />
     <Compile Include="PriorityQueue\PriorityQueueMax.cs" />
     <Compile Include="PriorityQueue\PriorityQueueMin.cs" />
     <Compile Include="Program.cs" />

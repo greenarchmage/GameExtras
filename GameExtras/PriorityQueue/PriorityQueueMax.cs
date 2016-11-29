@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace GameExtras.PriorityQueue
 {
-  public class PriorityQueueMax<T> : IEnumerable<T> where T : IComparable 
+  public class PriorityQueueMax<T> : IEnumerable<T> where T : IComparable<T> 
   {
     private T[] pq;
     public int Count { get; private set; }
@@ -140,14 +140,14 @@ namespace GameExtras.PriorityQueue
 
     public IEnumerator<T> GetEnumerator()
     {
-      PriorityQueueMin<T> copy = new PriorityQueueMin<T>();
+      PriorityQueueMax<T> copy = new PriorityQueueMax<T>();
       for(int i = 0; i < Count; i++)
       {
         copy.insert(pq[i+1]);
       }
       while(!copy.IsEmpty())
       {
-        yield return copy.DelMin();
+        yield return copy.DelMax();
       }
     }
 
