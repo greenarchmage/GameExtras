@@ -52,7 +52,7 @@ namespace GameExtras.Astar
       if (AStarPathfinding.exists(newX, newY, passable) && passable[newX, newY])
       {
         int newCost = this.costToGetHere + 1;
-        int newEstimate = AStarPathfinding.euclideanDistance(newX, newY, goalX, goalY);
+        int newEstimate = AStarPathfinding.EuclideanDistance(newX, newY, goalX, goalY);
         Node newNode = new Node(newX, newY, newCost, newEstimate);
         if (distanceMatrix[newX, newY] < 0 || newCost < distanceMatrix[newX, newY])
         {
